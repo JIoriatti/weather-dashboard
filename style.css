@@ -1,0 +1,88 @@
+html{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Raleway', sans-serif;
+}
+body{
+    margin: 0;
+}
+
+header{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    background: linear-gradient(0.25turn, whitesmoke, rgb(219, 192, 39), orange);
+    margin: 0;
+    text-shadow: 1px 1px 20px black;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+h1{
+    margin-left: 2em;
+    align-items: center;
+}
+.line{
+    width: 90%;
+    border-top: 2px solid rgba(167, 167, 167, 0.678);
+    margin-top: 1em;
+}
+.city{
+    background-color: lightcoral;
+    opacity: 90%;
+    margin-top: 0.75em;
+    margin-bottom: 0.5em;
+    padding: 0.5em;
+    width: 70%;
+    border-radius: 4px;
+    height: 1em;
+    color: whitesmoke;
+    text-align: center;
+    visibility: hidden;
+}
+.city-container{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: 100%;
+    align-items: center;
+}
+.search-container{
+    margin: 2em;
+    width: 20%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.search-bar, .search-btn, .city-container{
+    margin: 1em;
+    padding: 0.5em;
+    border-radius: 2px;
+}
+.search-btn{
+    outline: none;
+    border: none;
+    color: whitesmoke;
+    width: 70%;
+    font-size: 16px;
+    font-weight: bolder;
+    background-color: orange;
+    height: 2.5em;
+    transition: 0.2s;
+    cursor: pointer;
+}
+.search-btn:hover{
+    opacity: 60%;
+}
+
+.search-bar{
+    border: none;
+    outline: 1px solid black;
+    width: 70%;
+    height: 1.5em;
+    font-size: 16px;
+}
