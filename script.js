@@ -11,12 +11,17 @@ const searchbtnEl = document.querySelector(".search-btn")
 //Only populates the next available div, and does not repeat text content if the user searches the same city twice.
 //Capitilizes the first letter in each word inputted from the user.
 function searchResults(){
+    if(searchBarEl.value == ""){
+        return;
+    }
+    else{
     const searchResult = searchBarEl.value.toLowerCase();
     const uncapitilized = searchResult.split(" ");
     for(let x=0; x<uncapitilized.length; x++){
         uncapitilized[x] = uncapitilized[x][0].toUpperCase()+ uncapitilized[x].substr(1);
     };
     const capWords = uncapitilized.join(" ");
+    
     for(let i=0; i<cityHistoryEl.length; i++){
         if(searchResult === cityHistoryEl[i].textContent.toLowerCase()){
             break;
@@ -31,13 +36,14 @@ function searchResults(){
     };
     searchBarEl.value = "";
 };
-//Using the setTimeout method to prevent the "preload" class from being applied to the body after a delay of 500 miliseconds. This is used to stop the CSS animations from running when the page refreshes.
+};
+//Using the setTimeout method to prevent the "preload" class from being applied to the body after a delay of 1 milisecond. This is used to stop the CSS animations from running when the page refreshes.
 setTimeout(function(){
     document.body.className="preload";
-},500);
+},1);
 
 function getWeatherData(){
-
+    
 };
 
 
