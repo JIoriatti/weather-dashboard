@@ -43,7 +43,16 @@ setTimeout(function(){
 },1);
 
 function getWeatherData(){
-    
+        const weatherAPI = "https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={de73034a4588e62fa8aa08f41bebbd0c}"      
+        fetch(weatherAPI)
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            console.log(data)
+            console.log(data.data[1].name)
+            }
+          );
 };
 
 
@@ -53,6 +62,11 @@ function getWeatherData(){
 $('.search-bar').on('keyup', function(event){
     if(event.key === 'enter' || event.keyCode === 13){
         searchResults();
+        getWeatherData();
     };
 });
-searchbtnEl.addEventListener("click", searchResults);
+$('.search-btn').on('click', function(event){
+    event.preventDefault();
+    searchResults();
+    getWeatherData();
+})
