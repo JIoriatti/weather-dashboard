@@ -9,9 +9,14 @@ const searchbtnEl = document.querySelector(".search-btn")
 //Declaring a function to take the User's input (value) of the search bar element and populates an epmty, previously hidden, div.
 //To be called when the user clicks the search button.
 //Only populates the next available div, and does not repeat text content if the user searches the same city twice.
+//Capitilizes the first letter in each word inputted from the user.
 function searchResults(){
-    console.log("Submit is working");
     const searchResult = searchBarEl.value.toLowerCase();
+    const uncapitilized = searchResult.split(" ");
+    for(let x=0; x<uncapitilized.length; x++){
+        uncapitilized[x] = uncapitilized[x][0].toUpperCase()+ uncapitilized[x].substr(1);
+    };
+    const capWords = uncapitilized.join(" ");
     for(let i=0; i<cityHistoryEl.length; i++){
         if(searchResult === cityHistoryEl[i].textContent.toLowerCase()){
             break;
@@ -20,7 +25,7 @@ function searchResults(){
             continue;
         };
         $(cityHistoryEl[i]).fadeIn();
-        cityHistoryEl[i].textContent = searchResult.charAt(0).toUpperCase() + searchResult.slice(1);
+        cityHistoryEl[i].textContent = capWords;
         localStorage.setItem("City" + (i+1), cityHistoryEl[i].textContent);
         break;
     };
