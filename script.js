@@ -1,23 +1,46 @@
 const searchBarEl = document.querySelector(".search-bar");
-const cityHistoryEl = document.querySelectorAll(".city");
+const cityHistoryEl = $(".city");
 const searchbtnEl = document.querySelector(".search-btn")
 
 
 
 
 
-
+//Declaring a function to take the User's input (value) of the search bar element and populates an epmty, previously hidden, div.
+//To be called when the user clicks the search button.
+//Only populates the next available div, and does not repeat text content if the user searches the same city twice.
 function searchResults(){
     console.log("Submit is working");
     const searchResult = searchBarEl.value.toLowerCase();
-    cityHistoryEl[0].style.visibility = "initial";
-    cityHistoryEl[0].textContent = searchResult.toUpperCase();
-    localStorage.setItem("Search History", searchResult);
+    for(let i=0; i<cityHistoryEl.length; i++){
+        if(searchResult === cityHistoryEl[i].textContent.toLowerCase()){
+            break;
+        };
+        if(cityHistoryEl[i].textContent){
+            continue;
+        };
+        $(cityHistoryEl[i]).fadeIn();
+        cityHistoryEl[i].textContent = searchResult.charAt(0).toUpperCase() + searchResult.slice(1);
+        localStorage.setItem("City" + (i+1), cityHistoryEl[i].textContent);
+        break;
+    };
+};
+//Using the setTimeout method to prevent the "preload" class from being applied to the body after a delay of 500 miliseconds. This is used to stop the CSS animations from running when the page refreshes.
+setTimeout(function(){
+    document.body.className="preload";
+},500);
+
+function getWeatherData(){
+
 };
 
 
 
 
-
-searchbtnEl.addEventListener("click", searchResults)
-searchBarEl.addEventListener("change", searchResults);
+//Using jquery .on method instead of addeventlistener that will call searchResults() function when the user releases the "enter" key within the search bar element.
+$('.search-bar').on('keyup', function(event){
+    if(event.key === 'enter' || event.keyCode === 13){
+        searchResults();
+    };
+});
+searchbtnEl.addEventListener("click", searchResults);

@@ -10,32 +10,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
 </head>
-<body>
+
+<body class="preload">
     <header>
         <h1>Weather Dashboard</h1>
     </header>
-    <div class="search-container">
-        <input class="search-bar" type="text" placeholder="Enter a city name">
-        <button class="search-btn">Search</button>
-        <span class="line"></span>
-        <div class="city-container">
-            <div class="city"></div>
-            <div class="city"></div>
-            <div class="city"></div>
-            <div class="city"></div>
-            <div class="city"></div>
-            <div class="city"></div>
-            <div class="city"></div>
-            <div class="city"></div>
-            <div class="city"></div>
-            <div class="city"></div>
+    <div class="main-container">
+        <div class="search-container">
+            <input class="search-bar" type="text" placeholder="Enter a city name">
+            <button class="search-btn">Search</button>
+            <span class="line"></span>
+            <div class="city-container">
+                <div class="city"></div>
+                <div class="city"></div>
+                <div class="city"></div>
+                <div class="city"></div>
+                <div class="city"></div>
+                <div class="city"></div>
+                <div class="city"></div>
+                <div class="city"></div>
+                <div class="city"></div>
+                <div class="city"></div>
+            </div>
         </div>
+        <div class="data-container"></div>
     </div>
-    
 
 
-
-
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="./script.js"></script>
 </body>
 </html>
