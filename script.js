@@ -29,6 +29,7 @@ function searchResults(){
         localStorage.setItem("City" + (i+1), cityHistoryEl[i].textContent);
         break;
     };
+    searchBarEl.value = "";
 };
 //Using the setTimeout method to prevent the "preload" class from being applied to the body after a delay of 500 miliseconds. This is used to stop the CSS animations from running when the page refreshes.
 setTimeout(function(){
