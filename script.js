@@ -1,9 +1,10 @@
 const searchBarEl = document.querySelector(".search-bar");
 const cityHistoryEl = $(".city");
 const searchbtnEl = document.querySelector(".search-btn")
-
-
-
+const cityNameEl = $(".city-info");
+const tempEl = $(".temp");
+const windEl = $(".wind");
+const humidityEL = $(".humidity");
 
 
 //Declaring a function to take the User's input (value) of the search bar element and populates an epmty, previously hidden, div.
@@ -73,29 +74,23 @@ function getWeatherData(){
             let weatherData = await setWeatherURL();
             let response = await fetch(weatherData);
             let data = await response.json();
+            console.log(data);
             return data;
         }
+        fetchWeather();
         async function renderWeather(){
+            let cityData = await fetchWeather();
+            let cityName = cityData.city.name;
+            cityNameEl.text(cityName);
+            cityNameEl.fadeIn();
+            let cityTemp = ((cityData.list[0].main.temp - 273.15)* (9/5) + 32).toFixed(2);
+            tempEl.text("Temperature " + cityTemp + "\u00B0 F");
+            tempEl.fadeIn();
+            windEl.text("Wind-speed: " + cityData.list[0].wind.speed + " m/s, " + "Wind direction: " + cityData.list[0].wind.deg + "\u00B0" + ", " + "Wind-gust " + cityData.list[0].wind.gust + " m/s");
+            windEl.fadeIn();
 
         }
-
-
-
-
-
-    // fetch(geoCord)
-    //     .then(function (response) {
-    //     return response.json();
-    //     })
-    //     .then(function (data) {
-    //         var latLong = [];
-    //         latLong.push(data[0].lat);
-    //         latLong.push(data[0].lon);
-    //         console.log(latLong);
-    //         return latLong;
-            
-    //     }
-    //     )
+        renderWeather();
 
     };
 };
