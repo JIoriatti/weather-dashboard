@@ -28,6 +28,8 @@ header{
 }
 .temp, .wind, .humidity{
     display: none;
+    margin-left: 2em;
+    white-space: pre;
 }
 
 h1{
@@ -38,7 +40,8 @@ h1{
     font-family: 'Times New Roman', Times, serif;
     font-weight: 300;
     font-size: 28px;
-    margin-top: 0;
+    margin-top: .5em;
+    display: none;
 }
 .info{
     font-size: 16px;
@@ -104,6 +107,7 @@ h1{
 align-content: center;
 text-align: center;
 width: 15%;
+display: none;
 
 }
 .main-container{

@@ -5,6 +5,8 @@ const cityNameEl = $(".city-info");
 const tempEl = $(".temp");
 const windEl = $(".wind");
 const humidityEL = $(".humidity");
+const forecastHeaderEL = $(".five-day-header");
+const fiveDayEl = $(".five-day");
 
 
 //Declaring a function to take the User's input (value) of the search bar element and populates an epmty, previously hidden, div.
@@ -67,7 +69,7 @@ function getWeatherData(){
         }
         async function setWeatherURL(){
             let cordArray = await getCord();
-            let weatherAPI = "https://api.openweathermap.org/data/2.5/forecast?lat=" + cordArray[0] + "&lon=" + cordArray[1] + "&APPID=" + apiKey;
+            let weatherAPI = "https://api.openweathermap.org/data/2.5/forecast?lat=" + cordArray[0] + "&lon=" + cordArray[1] + "&APPID=" + apiKey + "&units=imperial";
             return weatherAPI;
         }
         async function fetchWeather(){
@@ -81,13 +83,20 @@ function getWeatherData(){
         async function renderWeather(){
             let cityData = await fetchWeather();
             let cityName = cityData.city.name;
-            cityNameEl.text(cityName);
+            let date = cityData.list[0].dt_txt;
+            let dateSplit = date.split(" ");
+            cityNameEl.text(cityName + " (" + dateSplit[0] + ")");
             cityNameEl.fadeIn();
-            let cityTemp = ((cityData.list[0].main.temp - 273.15)* (9/5) + 32).toFixed(2);
+            // let cityTemp = ((cityData.list[0].main.temp - 273.15)* (9/5) + 32).toFixed(2);
+            let cityTemp = cityData.list[0].main.temp;
             tempEl.text("Temperature " + cityTemp + "\u00B0 F");
             tempEl.fadeIn();
-            windEl.text("Wind-speed: " + cityData.list[0].wind.speed + " m/s, " + "Wind direction: " + cityData.list[0].wind.deg + "\u00B0" + ", " + "Wind-gust " + cityData.list[0].wind.gust + " m/s");
+            windEl.text("Wind-speed: " + cityData.list[0].wind.speed + " mph " + "\nWind direction: " + cityData.list[0].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[0].wind.gust + " mph");
             windEl.fadeIn();
+            let cityHumidity = cityData.list[0].main.humidity;
+            humidityEL.text("Humidity: " + cityHumidity + "%");
+            humidityEL.fadeIn();
+            forecastHeaderEL.fadeIn();
 
         }
         renderWeather();
