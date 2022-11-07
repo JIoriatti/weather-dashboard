@@ -41,7 +41,6 @@ function searchResults(){
             };
             $(cityHistoryEl[i]).fadeIn();
             cityHistoryEl[i].textContent = capWords;
-            localStorage.setItem("City" + (i+1), cityHistoryEl[i].textContent);
             break;
         };
         searchBarEl.value = "";
@@ -49,10 +48,10 @@ function searchResults(){
 };
 
 
-function getWeatherData(){
+function getWeatherData(cityName){
     const apiKey = "de73034a4588e62fa8aa08f41bebbd0c"
-    const cityName = searchBarEl.value.toLowerCase();
-    const geoCord = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1&appid=" + apiKey;
+    cityLower = cityName.toLowerCase();
+    const geoCord = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityLower + "&limit=1&appid=" + apiKey;
     if(searchBarEl.value ==""){
         return;
     }
@@ -123,7 +122,6 @@ function getWeatherData(){
                 },5000)
             }
         }
-        // fetchWeather();
         async function renderWeather(){
             const cityNameEl = $(".city-info");
             let cityData = await fetchWeather();
@@ -160,6 +158,17 @@ function getWeatherData(){
                     $(humidityEL[i]).text("Humidity: " + cityData.list[(i*8)-1].main.humidity + "%")
                 }
             }
+            // Storage object to be stringified and set into local storage to be called upon later to re-populate the weather data of previsouly searched cities.
+            let storageOneDay = {
+                name: cityName,
+                date: dateSplit,
+                temp: cityTemp,
+                windSpeed: cityData.list[0].wind.speed,
+                windDir: cityData.list[0].wind.deg,
+                windGust: cityData.list[0].wind.gust,
+                humidity: cityHumidity
+            };
+            localStorage.setItem(cityName, JSON.stringify(storageOneDay));
             searchResults();
         }
         renderWeather();
@@ -175,13 +184,24 @@ function getWeatherData(){
 //Using jquery .on method instead of addeventlistener that will call searchResults() function when the user releases the "enter" key within the search bar element.
 $('.search-bar').on('keyup', function(event){
     if(event.key === 'enter' || event.keyCode === 13){
-        getWeatherData();
+        getWeatherData(searchBarEl.value);
         
        
     };
 });
 $('.search-btn').on('click', function(event){
     event.preventDefault();
-    getWeatherData();
+    getWeatherData(searchBarEl.value);
     
+})
+
+//Creating a click event on the seach history divs to re-populate the weather data container
+$('.city').on('click', function (event){
+    target = event.target.textContent
+    let historyObj = JSON.parse(localStorage.getItem(target));
+    console.log(historyObj);
+    cityNameEl.text(historyObj.name + " (" + historyObj.date[0] + ")");
+    tempEl.text("Temperature " + historyObj.temp + "\u00B0 F");
+    windEl.text("Wind-speed: " + historyObj.windSpeed + " MPH " + "\nWind direction: " + historyObj.windDir + "\u00B0" + "\nWind-gust: " + historyObj.windGust + " MPH");
+    humidityEL.text("Humidity: " + historyObj.humidity + "%");
 })
