@@ -20,7 +20,7 @@ setTimeout(function(){
 //To be called when the user clicks the search button.
 //Only populates the next available div, and does not repeat text content if the user searches the same city twice.
 //Capitilizes the first letter in each word inputted from the user.
-function searchResults(){
+function searchResults(city){
     if(searchBarEl.value == ""){
         return;
     }
@@ -40,7 +40,7 @@ function searchResults(){
                 continue;
             };
             $(cityHistoryEl[i]).fadeIn();
-            cityHistoryEl[i].textContent = capWords;
+            cityHistoryEl[i].textContent = city;
             break;
         };
         searchBarEl.value = "";
@@ -198,7 +198,7 @@ function getWeatherData(cityName){
             //Setting the storage objects, both single day and 5-day, to local storage using the JSON.stringify method.
             localStorage.setItem(cityName, JSON.stringify(storageOneDay));
             localStorage.setItem(cityName + " 5-day", JSON.stringify(storageFiveDay));
-            searchResults();
+            searchResults(cityData.city.name);
         }
         renderWeather();
     
