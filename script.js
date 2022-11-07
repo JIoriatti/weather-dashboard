@@ -111,7 +111,7 @@ function getWeatherData(cityName){
                 let weatherData = await setWeatherURL();
                 let response = await fetch(weatherData);
                 let data = await response.json();
-                // console.log(data);
+                console.log(data);
                 return data;
             }
             catch(err){
@@ -140,6 +140,17 @@ function getWeatherData(cityName){
             humidityEL.fadeIn();
             forecastHeaderEL.fadeIn();
             fiveDayEl.fadeIn();
+            
+            // Storage object for 5-day forecast
+            let storageFiveDay = {
+                name: cityName,
+                date: [],
+                temp: [],
+                windSpeed:[], 
+                windDir: [],
+                windGust: [],
+                humidity: [],
+            };
             for(let i=1; i<6; i++){
                 if(i<5){
                     let d = cityData.list[i*8].dt_txt;
@@ -148,6 +159,13 @@ function getWeatherData(cityName){
                     $(tempEl[i]).text("Temperature " + cityData.list[i*8].main.temp + "\u00B0 F");
                     $(windEl[i]).text("Wind-speed: " + cityData.list[i*8].wind.speed + " MPH " + "\nWind direction: " + cityData.list[i*8].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[i*8].wind.gust + " MPH")
                     $(humidityEL[i]).text("Humidity: " + cityData.list[i*8].main.humidity + "%")
+                    storageFiveDay.date.push(dSplit[0]);
+                    storageFiveDay.temp.push(cityData.list[i*8].main.temp);
+                    storageFiveDay.windSpeed.push(cityData.list[i*8].wind.speed);
+                    storageFiveDay.windDir.push(cityData.list[i*8].wind.deg);
+                    storageFiveDay.windGust.push(cityData.list[i*8].wind.gust);
+                    storageFiveDay.humidity.push(cityData.list[i*8].main.humidity);
+                    
                 }
                 if(i===5){
                     let d = cityData.list[(i*8)-1].dt_txt;
@@ -156,6 +174,15 @@ function getWeatherData(cityName){
                     $(tempEl[i]).text("Temperature " + cityData.list[(i*8)-1].main.temp + "\u00B0 F");
                     $(windEl[i]).text("Wind-speed: " + cityData.list[(i*8)-1].wind.speed + " MPH " + "\nWind direction: " + cityData.list[(i*8)-1].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[(i*8)-1].wind.gust + " MPH")
                     $(humidityEL[i]).text("Humidity: " + cityData.list[(i*8)-1].main.humidity + "%")
+
+                    storageFiveDay.date.push(dSplit[0]);
+                    storageFiveDay.temp.push(cityData.list[(i*8)-1].main.temp);
+                    storageFiveDay.windSpeed.push(cityData.list[(i*8)-1].wind.speed);
+                    storageFiveDay.windDir.push(cityData.list[(i*8)-1].wind.deg);
+                    storageFiveDay.windGust.push(cityData.list[(i*8)-1].wind.gust);
+                    storageFiveDay.humidity.push(cityData.list[(i*8)-1].main.humidity);
+
+
                 }
             }
             // Storage object to be stringified and set into local storage to be called upon later to re-populate the weather data of previsouly searched cities.
@@ -168,7 +195,9 @@ function getWeatherData(cityName){
                 windGust: cityData.list[0].wind.gust,
                 humidity: cityHumidity
             };
+            //Setting the storage objects, both single day and 5-day, to local storage using the JSON.stringify method.
             localStorage.setItem(cityName, JSON.stringify(storageOneDay));
+            localStorage.setItem(cityName + " 5-day", JSON.stringify(storageFiveDay));
             searchResults();
         }
         renderWeather();
@@ -204,4 +233,22 @@ $('.city').on('click', function (event){
     tempEl.text("Temperature " + historyObj.temp + "\u00B0 F");
     windEl.text("Wind-speed: " + historyObj.windSpeed + " MPH " + "\nWind direction: " + historyObj.windDir + "\u00B0" + "\nWind-gust: " + historyObj.windGust + " MPH");
     humidityEL.text("Humidity: " + historyObj.humidity + "%");
+
+    let historyFiveDay = JSON.parse(localStorage.getItem(target + " 5-day"));
+    for(let i=1; i<6; i++){
+        if(i<5){
+            $(fiveDayDateEl[i-1]).text(historyFiveDay.date[i-1]);
+            $(tempEl[i]).text("Temperature " + historyFiveDay.temp[i-1] + "\u00B0 F");
+            $(windEl[i]).text("Wind-speed: " + historyFiveDay.windSpeed[i-1] + " MPH " + "\nWind direction: " + historyFiveDay.windDir[i-1] + "\u00B0" + "\nWind-gust: " + historyFiveDay.windGust[i-1] + " MPH")
+            $(humidityEL[i]).text("Humidity: " + historyFiveDay.humidity[i-1] + "%");
+            
+        }
+        if(i===5){
+            $(fiveDayDateEl[i-1]).text(historyFiveDay.date[i-1]);
+            $(tempEl[i]).text("Temperature " + historyFiveDay.temp[i-1] + "\u00B0 F");
+            $(windEl[i]).text("Wind-speed: " + historyFiveDay.windSpeed[i-1] + " MPH " + "\nWind direction: " + historyFiveDay.windDir[i-1] + "\u00B0" + "\nWind-gust: " + historyFiveDay.windGust[i-1] + " MPH")
+            $(humidityEL[i]).text("Humidity: " + historyFiveDay.humidity[i-1] + "%");
+        }
+    }
+
 })
