@@ -29,6 +29,7 @@ header{
 .temp, .wind, .humidity{
     display: none;
     margin-left: 2em;
+    margin-right: 2em;
     white-space: pre;
 }
 
@@ -41,6 +42,7 @@ h1{
     font-weight: 300;
     font-size: 28px;
     margin-top: .5em;
+    margin-left: 2em;
     display: none;
 }
 .info{
@@ -50,6 +52,13 @@ h1{
     width: 90%;
     border-top: 2px solid rgba(167, 167, 167, 0.678);
     margin-top: 1em;
+}
+.invalid{
+    display: none;
+    font-style: italic;
+    color: red;
+    font-weight: bold;
+    background:linear-gradient(0.25turn, rgba(182, 182, 182, 0.705), white) ;
 }
 .city{
     background-color: lightcoral;
