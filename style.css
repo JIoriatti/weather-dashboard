@@ -80,9 +80,10 @@ h1{
 .data-container{
     margin: 4em;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     flex-grow: 1;
-    height: 40em;
+    height: fit-content;
     width: 50%;
     outline: 2px solid rgba(0, 0, 0, 0.137);
 }
@@ -90,7 +91,7 @@ h1{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    height: 18em;
+    height: fit-content;
 }
 .city-info{
     align-self: stretch;
@@ -100,15 +101,15 @@ h1{
 .forecast-container{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: space-around;
     flex-grow: 2;
 }
 .five-day{
 align-content: center;
 text-align: center;
-width: 15%;
+width: fit-content;
 display: none;
-
 }
 .main-container{
     display: flex;

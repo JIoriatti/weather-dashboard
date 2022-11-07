@@ -7,6 +7,7 @@ const windEl = $(".wind");
 const humidityEL = $(".humidity");
 const forecastHeaderEL = $(".five-day-header");
 const fiveDayEl = $(".five-day");
+const fiveDayDateEl = $("h3");
 
 
 //Declaring a function to take the User's input (value) of the search bar element and populates an epmty, previously hidden, div.
@@ -87,7 +88,6 @@ function getWeatherData(){
             let dateSplit = date.split(" ");
             cityNameEl.text(cityName + " (" + dateSplit[0] + ")");
             cityNameEl.fadeIn();
-            // let cityTemp = ((cityData.list[0].main.temp - 273.15)* (9/5) + 32).toFixed(2);
             let cityTemp = cityData.list[0].main.temp;
             tempEl.text("Temperature " + cityTemp + "\u00B0 F");
             tempEl.fadeIn();
@@ -97,10 +97,27 @@ function getWeatherData(){
             humidityEL.text("Humidity: " + cityHumidity + "%");
             humidityEL.fadeIn();
             forecastHeaderEL.fadeIn();
-
+            fiveDayEl.fadeIn();
+            for(let i=1; i<6; i++){
+                if(i<5){
+                    let d = cityData.list[i*8].dt_txt;
+                    let dSplit = d.split(" ");
+                    $(fiveDayDateEl[i-1]).text(dSplit[0]);
+                    $(tempEl[i]).text("Temperature " + cityData.list[i*8].main.temp + "\u00B0 F");
+                    $(windEl[i]).text("Wind-speed: " + cityData.list[i*8].wind.speed + " mph " + "\nWind direction: " + cityData.list[i*8].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[i*8].wind.gust + " mph")
+                    $(humidityEL[i]).text("Humidity: " + cityData.list[i*8].main.humidity + "%")
+                }
+                if(i===5){
+                    let d = cityData.list[(i*8)-1].dt_txt;
+                    let dSplit = d.split(" ");
+                    $(fiveDayDateEl[i-1]).text(dSplit[0]);
+                    $(tempEl[i]).text("Temperature " + cityData.list[(i*8)-1].main.temp + "\u00B0 F");
+                    $(windEl[i]).text("Wind-speed: " + cityData.list[(i*8)-1].wind.speed + " mph " + "\nWind direction: " + cityData.list[(i*8)-1].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[(i*8)-1].wind.gust + " mph")
+                    $(humidityEL[i]).text("Humidity: " + cityData.list[(i*8)-1].main.humidity + "%")
+                }
+            }
         }
         renderWeather();
-
     };
 };
 
