@@ -31,6 +31,12 @@ h1{
     margin-left: 2em;
     align-items: center;
 }
+p{
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 300;
+    font-size: 28px;
+    margin-top: 0;
+}
 .line{
     width: 90%;
     border-top: 2px solid rgba(167, 167, 167, 0.678);
@@ -65,10 +71,32 @@ h1{
 .data-container{
     margin: 4em;
     display: flex;
+    flex-direction: column;
     flex-grow: 1;
     height: 40em;
     width: 50%;
-    border: 1px solid black;
+    outline: 2px solid rgba(0, 0, 0, 0.137);
+}
+.cty-info-container{
+    display: flex;
+    align-items: flex-start;
+    height: 18em;
+}
+.city-info{
+    flex-grow: 3;
+    align-content: center;
+}
+.forecast-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-grow: 2;
+}
+.five-day{
+align-content: center;
+text-align: center;
+width: 15%;
+
 }
 .main-container{
     display: flex;
@@ -104,7 +132,7 @@ h1{
 
 .search-bar{
     border: none;
-    outline: 1px solid black;
+    outline: 2px solid rgba(0, 0, 0, 0.137);
     width: 70%;
     height: 1.5em;
     font-size: 16px;

@@ -43,30 +43,77 @@ setTimeout(function(){
 },1);
 
 function getWeatherData(){
-        const weatherAPI = "https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={de73034a4588e62fa8aa08f41bebbd0c}"      
-        fetch(weatherAPI)
-          .then(function (response) {
-            return response.json();
-          })
-          .then(function (data) {
-            console.log(data)
-            console.log(data.data[1].name)
-            }
-          );
-};
+    const apiKey = "de73034a4588e62fa8aa08f41bebbd0c"
+    const cityName = searchBarEl.value.toLowerCase();
+    const geoCord = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityName + "&limit=1&appid=" + apiKey;
+    if(searchBarEl.value ==""){
+        return;
+    }
 
+    //Had a lot of trouble with this because I couldn't store the return value of a fetch into a variable to be used later, in this case the lat/long coordinates to be placed into the weatherAPI URL.
+    //Ended up using async functions instead of .then chaining because syntactically it makes much more sense to me.
+    //If we ever want to use/store/manipulate data pulled from another server do we always have to then use .then / async function chaining? Is there no way to store the final product into a global variable?
+    else{
+        async function fetchGeo(){
+            let response = await fetch(geoCord);
+            let data = await response.json();
+            return data;
+        }
+        async function getCord(){
+            let coOrds = await fetchGeo();
+            let latLong = [coOrds[0].lat, coOrds[0].lon];
+            return latLong;
+        }
+        async function setWeatherURL(){
+            let cordArray = await getCord();
+            let weatherAPI = "https://api.openweathermap.org/data/2.5/forecast?lat=" + cordArray[0] + "&lon=" + cordArray[1] + "&APPID=" + apiKey;
+            return weatherAPI;
+        }
+        async function fetchWeather(){
+            let weatherData = await setWeatherURL();
+            let response = await fetch(weatherData);
+            let data = await response.json();
+            return data;
+        }
+        async function renderWeather(){
+
+        }
+
+
+
+
+
+    // fetch(geoCord)
+    //     .then(function (response) {
+    //     return response.json();
+    //     })
+    //     .then(function (data) {
+    //         var latLong = [];
+    //         latLong.push(data[0].lat);
+    //         latLong.push(data[0].lon);
+    //         console.log(latLong);
+    //         return latLong;
+            
+    //     }
+    //     )
+
+    };
+};
 
 
 
 //Using jquery .on method instead of addeventlistener that will call searchResults() function when the user releases the "enter" key within the search bar element.
 $('.search-bar').on('keyup', function(event){
     if(event.key === 'enter' || event.keyCode === 13){
-        searchResults();
         getWeatherData();
+        searchResults();
+        
+       
     };
 });
 $('.search-btn').on('click', function(event){
     event.preventDefault();
-    searchResults();
     getWeatherData();
+    searchResults();
+    
 })
