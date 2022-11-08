@@ -123,14 +123,24 @@ function getWeatherData(cityName){
             }
         }
         async function fetchWeatherIcons(){
-            let data = await fetchWeather();
-            const weatherIcons =[]
-            for(let i=0;i<data.list.length;i++){
-            let weatherIconURL = "http://openweathermap.org/img/wn/" + data.list[0].weather[0].icon + ".png"
-            let weatherIcon = await fetch(weatherIconURL)
-            weatherIcons.push(weatherIcon);
-        }
-        return weatherIcons;
+           
+            try{
+                let data = await fetchWeather();
+                const weatherIcons =[]
+                for(let i=0;i<data.list.length;i++){
+                    let weatherIconURL = "http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png"
+                    let weatherIcon = await fetch(weatherIconURL)
+                    weatherIcons.push(weatherIcon);
+                }
+                return weatherIcons;
+            }
+            catch(err){
+                searchBarEl.value = "";
+                invalidEl.fadeIn(100);
+                setInterval(function(){
+                invalidEl.fadeOut(1000)
+                },5000)
+            }
         }
         async function renderWeather(){
             let cityIcons = await fetchWeatherIcons();
@@ -141,10 +151,11 @@ function getWeatherData(cityName){
             let date = cityData.list[0].dt_txt;
             let dateSplit = date.split(" ");
             let weatherIcon = cityIcons[0].url;
-            console.log(weatherIcon);
+            // console.log(weatherIcon);
             let iconImage = $("img");
             iconImage[0].setAttribute("src", weatherIcon);
-            console.log(iconImage[0]);
+            localStorage.setItem(cityName + " Icon", cityIcons[0].url);
+            // console.log(iconImage[0]);
             cityNameEl.text(cityName + " (" + dateSplit[0] + ")");
             cityNameEl.fadeIn();
             let cityTemp = cityData.list[0].main.temp;
@@ -161,6 +172,7 @@ function getWeatherData(cityName){
             // Storage object for 5-day forecast
             let storageFiveDay = {
                 name: cityName,
+                icon: [],
                 date: [],
                 temp: [],
                 windSpeed:[], 
@@ -182,10 +194,13 @@ function getWeatherData(cityName){
                 if(i<5){
                     let d = cityData.list[i*8].dt_txt;
                     let dSplit = d.split(" ");
+                    let weatherIcon = cityIcons[i*8].url;
                     $(fiveDayDateEl[i]).text(dateArray[(lastDateOccurance +1)+(i*8)]);
                     $(tempEl[i]).text("Temperature " + cityData.list[(i*8)+(lastDateOccurance+1)].main.temp + "\u00B0 F");
                     $(windEl[i]).text("Wind-speed: " + cityData.list[(i*8)+(lastDateOccurance+1)].wind.speed + " MPH " + "\nWind direction: " + cityData.list[(i*8)+(lastDateOccurance+1)].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[(i*8)+(lastDateOccurance+1)].wind.gust + " MPH")
                     $(humidityEL[i]).text("Humidity: " + cityData.list[(i*8)+(lastDateOccurance+1)].main.humidity + "%")
+                    iconImage[i].setAttribute("src", weatherIcon);
+                    storageFiveDay.icon.push(weatherIcon);
                     storageFiveDay.date.push(dSplit[0]);
                     storageFiveDay.temp.push(cityData.list[i*8].main.temp);
                     storageFiveDay.windSpeed.push(cityData.list[i*8].wind.speed);
@@ -198,10 +213,12 @@ function getWeatherData(cityName){
                 if(i===5){
                     let d = cityData.list[(i*8)-1].dt_txt;
                     let dSplit = d.split(" ");
+                    let weatherIcon = cityIcons[(i*8)-1].url;
                     $(tempEl[i]).text("Temperature " + cityData.list[(i*8)-lastDateOccurance].main.temp + "\u00B0 F");
                     $(windEl[i]).text("Wind-speed: " + cityData.list[(i*8)-lastDateOccurance].wind.speed + " MPH " + "\nWind direction: " + cityData.list[(i*8)-lastDateOccurance].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[(i*8)-lastDateOccurance].wind.gust + " MPH")
                     $(humidityEL[i]).text("Humidity: " + cityData.list[(i*8)-lastDateOccurance].main.humidity + "%")
-
+                    iconImage[i].setAttribute("src", weatherIcon);
+                    storageFiveDay.icon.push(weatherIcon);
                     storageFiveDay.date.push(dSplit[0]);
                     storageFiveDay.temp.push(cityData.list[(i*8)-1].main.temp);
                     storageFiveDay.windSpeed.push(cityData.list[(i*8)-1].wind.speed);
@@ -256,6 +273,9 @@ $('.city').on('click', function (event){
     target = event.target.textContent
     let historyObj = JSON.parse(localStorage.getItem(target));
     console.log(historyObj);
+    let iconImage = $("img");
+    let storedIcon = localStorage.getItem(target + " Icon");
+    iconImage[0].setAttribute("src", storedIcon);
     cityNameEl.text(historyObj.name + " (" + historyObj.date[0] + ")");
     tempEl.text("Temperature " + historyObj.temp + "\u00B0 F");
     windEl.text("Wind-speed: " + historyObj.windSpeed + " MPH " + "\nWind direction: " + historyObj.windDir + "\u00B0" + "\nWind-gust: " + historyObj.windGust + " MPH");
@@ -264,6 +284,7 @@ $('.city').on('click', function (event){
     let historyFiveDay = JSON.parse(localStorage.getItem(target + " 5-day"));
     for(let i=1; i<6; i++){
         if(i<5){
+            iconImage[i].setAttribute("src", historyFiveDay.icon[i]);
             $(fiveDayDateEl[i-1]).text(historyFiveDay.date[i-1]);
             $(tempEl[i]).text("Temperature " + historyFiveDay.temp[i-1] + "\u00B0 F");
             $(windEl[i]).text("Wind-speed: " + historyFiveDay.windSpeed[i-1] + " MPH " + "\nWind direction: " + historyFiveDay.windDir[i-1] + "\u00B0" + "\nWind-gust: " + historyFiveDay.windGust[i-1] + " MPH")
@@ -271,6 +292,7 @@ $('.city').on('click', function (event){
             
         }
         if(i===5){
+            iconImage[i].setAttribute("src", historyFiveDay.icon[i-1]);
             $(fiveDayDateEl[i-1]).text(historyFiveDay.date[i-1]);
             $(tempEl[i]).text("Temperature " + historyFiveDay.temp[i-1] + "\u00B0 F");
             $(windEl[i]).text("Wind-speed: " + historyFiveDay.windSpeed[i-1] + " MPH " + "\nWind direction: " + historyFiveDay.windDir[i-1] + "\u00B0" + "\nWind-gust: " + historyFiveDay.windGust[i-1] + " MPH")
