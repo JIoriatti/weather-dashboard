@@ -151,14 +151,24 @@ function getWeatherData(cityName){
                 windGust: [],
                 humidity: [],
             };
+            let dateArray = [];
+            for(let b=0; b<cityData.list.length;b++){
+                let indexDate = cityData.list[b].dt_txt
+                let splitIndex = indexDate.split(" ");
+                dateArray.push(splitIndex[0]);
+            }
+            console.log(dateArray);
+            let lastDateOccurance = dateArray.lastIndexOf(dateSplit[0]);
+            console.log(lastDateOccurance);
+            $(fiveDayDateEl[0]).text(dateArray[lastDateOccurance +1]);
             for(let i=1; i<6; i++){
                 if(i<5){
                     let d = cityData.list[i*8].dt_txt;
                     let dSplit = d.split(" ");
-                    $(fiveDayDateEl[i-1]).text(dSplit[0]);
-                    $(tempEl[i]).text("Temperature " + cityData.list[i*8].main.temp + "\u00B0 F");
-                    $(windEl[i]).text("Wind-speed: " + cityData.list[i*8].wind.speed + " MPH " + "\nWind direction: " + cityData.list[i*8].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[i*8].wind.gust + " MPH")
-                    $(humidityEL[i]).text("Humidity: " + cityData.list[i*8].main.humidity + "%")
+                    $(fiveDayDateEl[i]).text(dateArray[(lastDateOccurance +1)+(i*8)]);
+                    $(tempEl[i]).text("Temperature " + cityData.list[(i*8)+(lastDateOccurance+1)].main.temp + "\u00B0 F");
+                    $(windEl[i]).text("Wind-speed: " + cityData.list[(i*8)+(lastDateOccurance+1)].wind.speed + " MPH " + "\nWind direction: " + cityData.list[(i*8)+(lastDateOccurance+1)].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[(i*8)+(lastDateOccurance+1)].wind.gust + " MPH")
+                    $(humidityEL[i]).text("Humidity: " + cityData.list[(i*8)+(lastDateOccurance+1)].main.humidity + "%")
                     storageFiveDay.date.push(dSplit[0]);
                     storageFiveDay.temp.push(cityData.list[i*8].main.temp);
                     storageFiveDay.windSpeed.push(cityData.list[i*8].wind.speed);
@@ -167,13 +177,13 @@ function getWeatherData(cityName){
                     storageFiveDay.humidity.push(cityData.list[i*8].main.humidity);
                     
                 }
+                //Was getting a bit confused on how I could start the loop at the first occurance of the next unique date, but I think I finally got it.
                 if(i===5){
                     let d = cityData.list[(i*8)-1].dt_txt;
                     let dSplit = d.split(" ");
-                    $(fiveDayDateEl[i-1]).text(dSplit[0]);
-                    $(tempEl[i]).text("Temperature " + cityData.list[(i*8)-1].main.temp + "\u00B0 F");
-                    $(windEl[i]).text("Wind-speed: " + cityData.list[(i*8)-1].wind.speed + " MPH " + "\nWind direction: " + cityData.list[(i*8)-1].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[(i*8)-1].wind.gust + " MPH")
-                    $(humidityEL[i]).text("Humidity: " + cityData.list[(i*8)-1].main.humidity + "%")
+                    $(tempEl[i]).text("Temperature " + cityData.list[(i*8)-lastDateOccurance].main.temp + "\u00B0 F");
+                    $(windEl[i]).text("Wind-speed: " + cityData.list[(i*8)-lastDateOccurance].wind.speed + " MPH " + "\nWind direction: " + cityData.list[(i*8)-lastDateOccurance].wind.deg + "\u00B0" + "\nWind-gust: " + cityData.list[(i*8)-lastDateOccurance].wind.gust + " MPH")
+                    $(humidityEL[i]).text("Humidity: " + cityData.list[(i*8)-lastDateOccurance].main.humidity + "%")
 
                     storageFiveDay.date.push(dSplit[0]);
                     storageFiveDay.temp.push(cityData.list[(i*8)-1].main.temp);
