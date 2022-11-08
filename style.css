@@ -37,6 +37,10 @@ h1{
     margin-left: 2em;
     align-items: center;
 }
+img{
+    background: rgb(214, 214, 214);
+    border-radius: 6px;
+}
 .five-day-header{
     font-family: 'Times New Roman', Times, serif;
     font-weight: 300;

@@ -122,12 +122,29 @@ function getWeatherData(cityName){
                 },5000)
             }
         }
+        async function fetchWeatherIcons(){
+            let data = await fetchWeather();
+            const weatherIcons =[]
+            for(let i=0;i<data.list.length;i++){
+            let weatherIconURL = "http://openweathermap.org/img/wn/" + data.list[0].weather[0].icon + ".png"
+            let weatherIcon = await fetch(weatherIconURL)
+            weatherIcons.push(weatherIcon);
+        }
+        return weatherIcons;
+        }
         async function renderWeather(){
+            let cityIcons = await fetchWeatherIcons();
+            console.log(cityIcons);
             const cityNameEl = $(".city-info");
             let cityData = await fetchWeather();
             let cityName = cityData.city.name;
             let date = cityData.list[0].dt_txt;
             let dateSplit = date.split(" ");
+            let weatherIcon = cityIcons[0].url;
+            console.log(weatherIcon);
+            let iconImage = $("img");
+            iconImage[0].setAttribute("src", weatherIcon);
+            console.log(iconImage[0]);
             cityNameEl.text(cityName + " (" + dateSplit[0] + ")");
             cityNameEl.fadeIn();
             let cityTemp = cityData.list[0].main.temp;
@@ -177,7 +194,7 @@ function getWeatherData(cityName){
                     storageFiveDay.humidity.push(cityData.list[i*8].main.humidity);
                     
                 }
-                //Was getting a bit confused on how I could start the loop at the first occurance of the next unique date, but I think I finally got it.
+                //Was getting a bit confused on how I could start the loop at the first occurance of the next unique date, but I think I finally got it. Probably a MUCH easier way of doing this as per usual.
                 if(i===5){
                     let d = cityData.list[(i*8)-1].dt_txt;
                     let dSplit = d.split(" ");
