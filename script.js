@@ -51,7 +51,7 @@ function searchResults(city){
 function getWeatherData(cityName){
     const apiKey = "de73034a4588e62fa8aa08f41bebbd0c"
     cityLower = cityName.toLowerCase();
-    const geoCord = "http://api.openweathermap.org/geo/1.0/direct?q=" + cityLower + "&limit=1&appid=" + apiKey;
+    const geoCord = "https://api.openweathermap.org/geo/1.0/direct?q=" + cityLower + "&limit=1&appid=" + apiKey;
     if(searchBarEl.value ==""){
         return;
     }
@@ -128,7 +128,7 @@ function getWeatherData(cityName){
                 let data = await fetchWeather();
                 const weatherIcons =[]
                 for(let i=0;i<data.list.length;i++){
-                    let weatherIconURL = "http://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png"
+                    let weatherIconURL = "https://openweathermap.org/img/wn/" + data.list[i].weather[0].icon + ".png"
                     let weatherIcon = await fetch(weatherIconURL)
                     weatherIcons.push(weatherIcon);
                 }
